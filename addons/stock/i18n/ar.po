@@ -12,7 +12,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 18.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-01-27 13:02+0000\n"
+"POT-Creation-Date: 2025-03-19 20:36+0000\n"
 "PO-Revision-Date: 2024-09-25 09:42+0000\n"
 "Last-Translator: Malaz Abuidris <msea@odoo.com>, 2025\n"
 "Language-Team: Arabic (https://app.transifex.com/odoo/teams/41243/ar/)\n"
@@ -5404,7 +5404,7 @@ msgstr "عدد بنود الحركة "
 #. module: stock
 #: model:ir.model.fields,field_description:stock.field_stock_return_picking_line__move_quantity
 msgid "Move Quantity"
-msgstr ""
+msgstr "كمية حركة المخزون "
 
 #. module: stock
 #: model:ir.model.fields,help:stock.field_stock_move__origin_returned_move_id
@@ -5544,7 +5544,7 @@ msgstr "مطلقًا"
 #. module: stock
 #: model:ir.model.fields,field_description:stock.field_stock_move__never_product_template_attribute_value_ids
 msgid "Never attribute Values"
-msgstr ""
+msgstr "قيم الخصائص التي لا يجب استخدامها "
 
 #. module: stock
 #. odoo-python
@@ -7633,7 +7633,7 @@ msgstr "تجديد المخزون عند الطلب (الإنتاج حسب ال�
 #. module: stock
 #: model_terms:ir.ui.view,arch_db:stock.view_product_replenish
 msgid "Replenish wizard"
-msgstr "معالج نجديد المخزون "
+msgstr "معالج تجديد المخزون "
 
 #. module: stock
 #. odoo-javascript
@@ -9051,11 +9051,12 @@ msgstr "رقم المجموعة/الرقم التسلسلي (%s) مرتبط بم
 #. module: stock
 #. odoo-python
 #: code:addons/stock/models/stock_picking.py:0
-#, python-format
 msgid ""
 "The Picking Operations report has been deleted so you cannot print at this "
 "time unless the report is restored."
 msgstr ""
+"تم حذف تقرير عمليات الانتقاء لذا لا يمكنك الطباعة في الوقت الحالي ما لم تتم "
+"استعادة التقرير. "
 
 #. module: stock
 #. odoo-python

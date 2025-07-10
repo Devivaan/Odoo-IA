@@ -9,6 +9,7 @@ import {
     isParagraphRelatedElement,
     isProtected,
     isProtecting,
+    isShrunkBlock,
     listElementSelector,
 } from "@html_editor/utils/dom_info";
 import {
@@ -121,6 +122,7 @@ export class ListPlugin extends Plugin {
         shift_tab_overrides: this.handleShiftTab.bind(this),
         split_element_block_overrides: this.handleSplitBlock.bind(this),
         node_to_insert_processors: this.processNodeToInsert.bind(this),
+        before_insert_within_pre_processors: this.insertListWithinPre.bind(this),
     };
 
     setup() {
@@ -622,14 +624,16 @@ export class ListPlugin extends Plugin {
         const ul = li.parentNode;
         const dir = ul.getAttribute("dir");
         const textAlign = ul.style.getPropertyValue("text-align");
-        wrapInlinesInBlocks(li, {
-            baseContainerNodeName: this.dependencies.baseContainer.getDefaultNodeName(),
-            cursors,
-        });
-        if (!li.hasChildNodes()) {
-            // Outdenting an empty LI produces an empty baseContainer
+        const children = childNodes(li);
+        if (!children.every(isBlock)) {
             const baseContainer = this.dependencies.baseContainer.createBaseContainer();
-            baseContainer.append(this.document.createElement("br"));
+            for (const child of children) {
+                cursors.update(callbacksForCursorUpdate.append(baseContainer, child));
+                baseContainer.append(child);
+            }
+            if (isShrunkBlock(baseContainer)) {
+                baseContainer.append(this.document.createElement("br"));
+            }
             li.append(baseContainer);
             cursors.remapNode(li, baseContainer);
         }
@@ -700,11 +704,11 @@ export class ListPlugin extends Plugin {
             return nodeToInsert;
         }
         const mode = container && this.getListMode(listEl);
-        if (
-            (isListItemElement(nodeToInsert) && nodeToInsert.classList.contains("oe-nested")) ||
-            isListElement(nodeToInsert)
-        ) {
+        if (isListItemElement(nodeToInsert) && nodeToInsert.classList.contains("oe-nested")) {
             return this.convertList(nodeToInsert, mode);
+        }
+        if (isListElement(nodeToInsert)) {
+            return this.convertList(nodeToInsert, this.getListMode(nodeToInsert));
         }
         return nodeToInsert;
     }
@@ -835,6 +839,29 @@ export class ListPlugin extends Plugin {
         }
 
         return true;
+    }
+
+    insertListWithinPre(node) {
+        const listItems = node.querySelectorAll("li:not(.oe-nested)");
+        for (const li of listItems) {
+            const nestingLvl = ancestors(li).filter(isListElement).length - 1;
+            const list = closestElement(li, "ul, ol");
+            const listMode = this.getListMode(list);
+            let char;
+            if (listMode === "CL") {
+                char = "[] ";
+            } else if (listMode === "OL") {
+                const children = childNodes(li.parentElement).filter(
+                    (n) => !n.classList.contains("oe-nested")
+                );
+                char = `${children.indexOf(li) + 1}. `;
+            } else {
+                char = "* ";
+            }
+            const prefix = " ".repeat(nestingLvl * 4) + char;
+            li.prepend(this.document.createTextNode(prefix));
+        }
+        return node;
     }
 
     // --------------------------------------------------------------------------

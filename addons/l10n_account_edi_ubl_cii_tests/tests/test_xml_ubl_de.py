@@ -112,19 +112,19 @@ class TestUBLDE(TestUBLCommon):
             invoice.ubl_cii_xml_id,
             xpaths=f'''
                 <xpath expr="./*[local-name()='ID']" position="replace">
-                    <ID>___ignore___</ID>
+                    <cbc:ID xmlns:cbc="urn:oasis:names:specification:ubl:schema:xsd:CommonBasicComponents-2">___ignore___</cbc:ID>
                 </xpath>
                 <xpath expr=".//*[local-name()='InvoiceLine'][1]/*[local-name()='ID']" position="replace">
-                    <ID>___ignore___</ID>
+                    <cbc:ID xmlns:cbc="urn:oasis:names:specification:ubl:schema:xsd:CommonBasicComponents-2">___ignore___</cbc:ID>
                 </xpath>
                 <xpath expr=".//*[local-name()='InvoiceLine'][2]/*[local-name()='ID']" position="replace">
-                    <ID>___ignore___</ID>
+                    <cbc:ID xmlns:cbc="urn:oasis:names:specification:ubl:schema:xsd:CommonBasicComponents-2">___ignore___</cbc:ID>
                 </xpath>
                 <xpath expr=".//*[local-name()='InvoiceLine'][3]/*[local-name()='ID']" position="replace">
-                    <ID>___ignore___</ID>
+                    <cbc:ID xmlns:cbc="urn:oasis:names:specification:ubl:schema:xsd:CommonBasicComponents-2">___ignore___</cbc:ID>
                 </xpath>
                 <xpath expr=".//*[local-name()='PaymentMeans']/*[local-name()='PaymentID']" position="replace">
-                    <PaymentID>___ignore___</PaymentID>
+                    <cbc:PaymentID xmlns:cbc="urn:oasis:names:specification:ubl:schema:xsd:CommonBasicComponents-2">___ignore___</cbc:PaymentID>
                 </xpath>
                 <xpath expr=".//*[local-name()='AdditionalDocumentReference']/*[local-name()='Attachment']/*[local-name()='EmbeddedDocumentBinaryObject']" position="attributes">
                     <attribute name="mimeCode">application/pdf</attribute>
@@ -135,6 +135,10 @@ class TestUBLDE(TestUBLCommon):
         )
         self.assertEqual(attachment.name[-10:], "ubl_de.xml")
         self._assert_imported_invoice_from_etree(invoice, attachment)
+
+    def test_export_import_invoice_new(self):
+        self.env['ir.config_parameter'].sudo().set_param('account_edi_ubl_cii.use_new_dict_to_xml_helpers', True)
+        self.test_export_import_invoice()
 
     def test_export_import_invoice_without_vat_and_peppol_endpoint(self):
         self.partner_2.write({
@@ -159,13 +163,13 @@ class TestUBLDE(TestUBLCommon):
             invoice.ubl_cii_xml_id,
             xpaths=f'''
                 <xpath expr="./*[local-name()='ID']" position="replace">
-                    <ID>___ignore___</ID>
+                    <cbc:ID xmlns:cbc="urn:oasis:names:specification:ubl:schema:xsd:CommonBasicComponents-2">___ignore___</cbc:ID>
                 </xpath>
                 <xpath expr=".//*[local-name()='InvoiceLine'][1]/*[local-name()='ID']" position="replace">
-                    <ID>___ignore___</ID>
+                    <cbc:ID xmlns:cbc="urn:oasis:names:specification:ubl:schema:xsd:CommonBasicComponents-2">___ignore___</cbc:ID>
                 </xpath>
                 <xpath expr=".//*[local-name()='PaymentMeans']/*[local-name()='PaymentID']" position="replace">
-                    <PaymentID>___ignore___</PaymentID>
+                    <cbc:PaymentID xmlns:cbc="urn:oasis:names:specification:ubl:schema:xsd:CommonBasicComponents-2">___ignore___</cbc:PaymentID>
                 </xpath>
                 <xpath expr=".//*[local-name()='AdditionalDocumentReference']/*[local-name()='Attachment']/*[local-name()='EmbeddedDocumentBinaryObject']" position="attributes">
                     <attribute name="mimeCode">application/pdf</attribute>
@@ -175,6 +179,10 @@ class TestUBLDE(TestUBLCommon):
             expected_file_path='from_odoo/xrechnung_ubl_out_invoice_without_vat.xml',
         )
         self._assert_imported_invoice_from_etree(invoice, attachment)
+
+    def test_export_import_invoice_without_vat_and_peppol_endpoint_new(self):
+        self.env['ir.config_parameter'].sudo().set_param('account_edi_ubl_cii.use_new_dict_to_xml_helpers', True)
+        self.test_export_import_invoice_without_vat_and_peppol_endpoint()
 
     def test_export_import_refund(self):
         refund = self._generate_move(
@@ -210,19 +218,19 @@ class TestUBLDE(TestUBLCommon):
             refund.ubl_cii_xml_id,
             xpaths=f'''
                 <xpath expr="./*[local-name()='ID']" position="replace">
-                    <ID>___ignore___</ID>
+                    <cbc:ID xmlns:cbc="urn:oasis:names:specification:ubl:schema:xsd:CommonBasicComponents-2">___ignore___</cbc:ID>
                 </xpath>
                 <xpath expr=".//*[local-name()='CreditNoteLine'][1]/*[local-name()='ID']" position="replace">
-                    <ID>___ignore___</ID>
+                    <cbc:ID xmlns:cbc="urn:oasis:names:specification:ubl:schema:xsd:CommonBasicComponents-2">___ignore___</cbc:ID>
                 </xpath>
                 <xpath expr=".//*[local-name()='CreditNoteLine'][2]/*[local-name()='ID']" position="replace">
-                    <ID>___ignore___</ID>
+                    <cbc:ID xmlns:cbc="urn:oasis:names:specification:ubl:schema:xsd:CommonBasicComponents-2">___ignore___</cbc:ID>
                 </xpath>
                 <xpath expr=".//*[local-name()='CreditNoteLine'][3]/*[local-name()='ID']" position="replace">
-                    <ID>___ignore___</ID>
+                    <cbc:ID xmlns:cbc="urn:oasis:names:specification:ubl:schema:xsd:CommonBasicComponents-2">___ignore___</cbc:ID>
                 </xpath>
                 <xpath expr=".//*[local-name()='PaymentMeans']/*[local-name()='PaymentID']" position="replace">
-                    <PaymentID>___ignore___</PaymentID>
+                    <cbc:PaymentID xmlns:cbc="urn:oasis:names:specification:ubl:schema:xsd:CommonBasicComponents-2">___ignore___</cbc:PaymentID>
                 </xpath>
                 <xpath expr=".//*[local-name()='AdditionalDocumentReference']/*[local-name()='Attachment']/*[local-name()='EmbeddedDocumentBinaryObject']" position="attributes">
                     <attribute name="mimeCode">application/pdf</attribute>
@@ -233,6 +241,10 @@ class TestUBLDE(TestUBLCommon):
         )
         self.assertEqual(attachment.name[-10:], "ubl_de.xml")
         self._assert_imported_invoice_from_etree(refund, attachment)
+
+    def test_export_import_refund_new(self):
+        self.env['ir.config_parameter'].sudo().set_param('account_edi_ubl_cii.use_new_dict_to_xml_helpers', True)
+        self.test_export_import_refund()
 
     ####################################################
     # Test import
@@ -297,37 +309,3 @@ class TestUBLDE(TestUBLCommon):
         self._detach_attachment(attachment)
         created_bill.message_post(attachment_ids=[attachment.id])
         self.assertTrue(created_bill)
-
-    def test_ensure_buyer_reference_xrechnung_xml(self):
-        acc_bank = self.env['res.partner.bank'].create({
-            'acc_number': 'BE15001559627232',
-            'partner_id': self.company_data['company'].partner_id.id,
-        })
-
-        self.partner_1.ref = False
-        invoice = self._generate_move(
-            self.partner_1,
-            self.partner_2,
-            move_type='out_invoice',
-            partner_id=self.partner_1.id,
-            partner_bank_id=acc_bank.id,
-            invoice_date='2017-01-01',
-            date='2017-01-01',
-            invoice_line_ids=[{
-                'product_id': self.product_a.id,
-                'product_uom_id': self.env.ref('uom.product_uom_dozen').id,
-                'price_unit': 275.0,
-                'quantity': 5,
-                'discount': 20.0,
-                'tax_ids': [(6, 0, self.tax_19.ids)],
-            }],
-        )
-
-        with self.assertRaises(UserError):
-            self.env['account.move.send'].with_context(
-                active_model='account.move',
-                active_ids=invoice.ids,
-            ).create({
-                'checkbox_download': False,
-                'checkbox_send_mail': False,
-            }).action_send_and_print()

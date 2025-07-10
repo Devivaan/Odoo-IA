@@ -24,6 +24,8 @@ class AccountEdiXmlUBLDE(models.AbstractModel):
         # EXTENDS account.edi.xml.ubl_bis3
         vals = super()._export_invoice_vals(invoice)
         vals['vals']['customization_id'] = self._get_customization_ids()['xrechnung']
+        if not vals['vals'].get('buyer_reference'):
+            vals['vals']['buyer_reference'] = 'N/A'
         return vals
 
     def _export_invoice_constraints(self, invoice, vals):
@@ -33,7 +35,6 @@ class AccountEdiXmlUBLDE(models.AbstractModel):
         constraints.update({
             'bis3_de_supplier_telephone_required': self._check_required_fields(vals['supplier'], ['phone', 'mobile']),
             'bis3_de_supplier_electronic_mail_required': self._check_required_fields(vals['supplier'], 'email'),
-            'bis3_de_buyer_reference_required': self._check_required_fields(vals['customer'], 'ref'),
         })
 
         return constraints
